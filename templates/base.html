@@ -1,10 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+{% load static %}
+<html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+  <meta charset="utf-8">
+  <title>{% block title %}TaskHub{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <body>
-
+<header>
+  <nav>
+    <a href="{% url 'task_manager:task-list' %}">📫 Task</a>
+    <a href="{% url 'task_manager:worker-list' %}">👩🏿‍🌾 Workers</a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'task_manager:task-create' %}">+ 📝 Create task</a>
+    {% endif %}
+  </nav>
+  <div>
+    {% if user.is_authenticated %}
+      Hi, {{ user.get_username }} —
+      <a href="{% url 'logout' %}">🚪 Log out</a>
+    {% else %}
+      <a href="{% url 'login' %}">🗝 Log in</a>
+    {% endif %}
+  </div>
+</header>
+<main>
+  {% for message in messages %}<p>{{ message }}</p>{% endfor %}
+  {% block content %}{% endblock %}
+</main>
 </body>
 </html>
