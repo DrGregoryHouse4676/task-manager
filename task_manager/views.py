@@ -1,134 +1,95 @@
-from django.shortcuts import render
-from datetime import date
-from django.contrib.auth.models import AbstractUser
-from django.db import models
-from django.utils import timezone
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.views import View, generic
+
+from .forms import TaskForm
+from .models import Task, Worker
 
 
-class Position(models.Model):
-    name = models.CharField(max_length=128, unique=True)
+class TaskListView(LoginRequiredMixin, generic.ListView):
+    model = Task
+    paginate_by = 20
 
-    class Meta:
-        ordering = ["name"]
+    def get_queryset(self):
+        querys = (
+            Task.objects.all()
+            .select_related("task_type", "project")
+            .prefetch_related("assignees", "tags")
+        )
+        status = self.request.GET.get("status")
+        if status == "open":
+            querys = querys.open()
+        elif status == "closed":
+            querys = querys.closed()
 
-    def __str__(self):
-        return self.name
+        if prior := self.request.GET.get("priority"):
+            querys = querys.filter(priority=prior)
 
+        if self.request.GET.get("mine"):
+            querys = querys.filter(assignees=self.request.user)
 
-class Worker(AbstractUser):
-    position = models.ForeignKey(
-        Position,
-        on_delete=models.PROTECT,
-        related_name="workers",
-        null=True,
-        blank=True
-    )
+        if tipy := self.request.GET.get("type"):
+            querys = querys.filter(task_type_id=tipy)
 
-    def __str__(self):
-        return self.get_full_name().strip() or self.username
+        if tag := self.request.GET.get("tag"):
+            querys = querys.filter(tags__name__iexact=tag)
 
+        if q := self.request.GET.get("q"):
+            querys = querys.filter(Q(name__icontains=q) | Q(description__icontains=q))
 
-class TaskType(models.Model):
-    name = models.CharField(max_length=128, unique=True)
-
-    class Meta:
-        ordering = ["name"]
-
-    def __str__(self):
-        return self.name
-
-
-class Tag(models.Model):
-    name = models.CharField(
-        max_length=64,
-        unique=True,
-        db_index=True
-    )
-
-    class Meta:
-        ordering = ["name"]
-
-    def __str__(self):
-        return self.name
+        return querys.order_by(*Task._meta.ordering)
 
 
-class Team(models.Model):
-    name = models.CharField(max_length=128, unique=True)
-    members = models.ManyToManyField(
-        "Worker",
-        related_name="teams",
-        blank=True
-    )
+class TaskDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Task
 
-    class Meta:
-        ordering = ["name"]
-
-    def __str__(self):
-        return self.name
+    def get_queryset(self):
+        return (
+            super()
+            .get_queryset()
+            .select_related("task_type", "project")
+            .prefetch_related("assignees", "tags")
+        )
 
 
-class Project(models.Model):
-    name = models.CharField(max_length=128)
-    description = models.TextField()
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="projects")
-    start_date = models.DateField(default=timezone.now)
-    due_date = models.DateField(null=True, blank=True)
-
-    class Meta:
-        unique_together = ("team", "name")
-        ordering = ["name"]
-
-    def __str__(self):
-        return f"{self.team}: {self.name}"
+class TaskCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Task
+    form_class = TaskForm
+    success_url = reverse_lazy("task_manager:task-list")
 
 
-class TaskQuerySet(models.query.QuerySet):
-    def open(self):
-        return self.filter(is_comleted=False)
-    def close(self):
-        return self.filter(is_comleted=True)
-    def due_today(self):
-        return self.filter(is_comleted=False, deadline=date.today())
-    def overdue(self):
-        return self.filter(is_comleted=False, deadline__lt=date.today())
+class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Task
+    form_class = TaskForm
+    success_url = reverse_lazy("task_manager:task-list")
 
 
-class Task(models.Model):
-    class Priority(models.TextChoices):
-        URGENT = "urgent", "Urgent"
-        HIGH = "high", "High"
-        MEDIUM = "medium", "Medium"
-        LOW = "low", "Low"
+class TaskToggleCompleteView(LoginRequiredMixin, View):
+    def post(self, pk):
+        task = get_object_or_404(Task, pk=pk)
+        task.is_completed = not task.is_completed
+        task.save(update_fields=["is_completed"])
+        return redirect("task_manager:task-detail", pk=pk)
 
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-    deadline = models.DateField()
-    is_comleted = models.BooleanField(default=False, db_index=True)
-    priority = models.CharField(
-        max_length=10,
-        choices=Priority.choices,
-        default=Priority.MEDIUM,
-        db_index=True
-    )
-    task_type = models.ForeignKey(TaskType, on_delete=models.PROTECT, related_name="tasks")
-    assignees = models.ManyToManyField(Worker, related_name="tasks", blank=True)
 
-    tags = models.ManyToManyField(Tag, related_name="tasks", blank=True)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="tasks", null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    objects = TaskQuerySet.as_manager()
+class WorkerListView(LoginRequiredMixin, generic.ListView):
+    model = Worker
+    paginate_by = 20
+    queryset = Worker.objects.select_related("position")
 
-    class Meta:
-        ordering = ["name", "deadline", "is_comleted"]
-        indexes = [
-            models.Index(fields=["deadline", "is_comleted"]),
-            models.Index(fields=["priority"]),
-        ]
 
-    def __str__(self):
-        return self.name
+class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Worker
 
-    @property
-    def is_overdue(self) -> bool:
-        return not self.is_comleted and self.deadline < date.today()
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        tasks_querys = (
+            Task.objects.filter(assignees=self.object)
+            .select_related("task_type", "project")
+            .prefetch_related("tags")
+        )
+        ctx["tasks_open"] = tasks_querys.open()
+        ctx["tasks_done"] = tasks_querys.closed()
+        return ctx
