@@ -1,10 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Workers{% endblock %}
+{% block content %}
+<h1>Workers</h1>
+<table>
+  <thead><tr><th>User</th><th>name, family_name</th><th>Position</th></tr></thead>
+  <tbody>
+  {% for w in object_list %}
+    <tr>
+      <td><a href="{% url 'task_manager:worker-detail' w.pk %}">{{ w.username }}</a></td>
+      <td>{{ w.get_full_name }}</td>
+      <td>{{ w.position|default:"—" }}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="3">Nobody gets out alive</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
