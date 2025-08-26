@@ -39,4 +39,14 @@ urlpatterns = [
         views.WorkerDetailView.as_view(),
         name="worker-detail"
     ),
+    path(
+        "tasks/<int:pk>/update/",
+        views.TaskUpdateView.as_view(),
+        name="task-update"
+    ),
+    path(
+        "tasks/<int:pk>/delete/",
+        views.TaskDeleteView.as_view(),
+        name="task-delete"
+    ),
 ]

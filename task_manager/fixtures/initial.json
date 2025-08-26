@@ -1,0 +1,8 @@
+[
+  {"model": "task_manager.position", "pk": 1, "fields": {"name": "Developer"}},
+  {"model": "task_manager.position", "pk": 2, "fields": {"name": "QA"}},
+  {"model": "task_manager.tasktype", "pk": 1, "fields": {"name": "Bug"}},
+  {"model": "task_manager.tasktype", "pk": 2, "fields": {"name": "New feature"}},
+  {"model": "task_manager.tag", "pk": 1, "fields": {"name": "python-refactoring"}},
+  {"model": "task_manager.tag", "pk": 2, "fields": {"name": "landing-page-layout"}}
+]

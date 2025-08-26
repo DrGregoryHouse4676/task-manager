@@ -1,10 +1,22 @@
 from datetime import date
 from django import forms
-from .models import Task
-
+from .models import Task, Worker, Tag, Project
 
 class TaskForm(forms.ModelForm):
     deadline = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}))
+    assignees = forms.ModelMultipleChoiceField(
+        queryset=Worker.objects.all(),
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+    tags = forms.ModelMultipleChoiceField(
+        queryset=Tag.objects.all(),
+        widget=forms.Select(attrs={"class": "form-check"})
+    )
+    project = forms.ModelChoiceField(
+        queryset=Project.objects.all(),
+        widget=forms.Select(attrs={"class": "form-control"}),
+        required=False
+    )
 
     class Meta:
         model = Task
@@ -19,6 +31,20 @@ class TaskForm(forms.ModelForm):
             "project",
             "is_completed",
         )
+        widgets = {
+            "assignees": forms.SelectMultiple(
+                attrs={"class": "form-control"}
+            ),
+            "tags": forms.CheckboxSelectMultiple(
+                attrs={"class": "form-check"}
+            ),
+            "project": forms.Select(
+                attrs={"class": "form-control"}
+            ),
+            "deadline": forms.DateInput(
+                attrs={"type": "date"}
+            ),
+        }
 
     def clean_deadline(self):
         ded = self.cleaned_data["deadline"]

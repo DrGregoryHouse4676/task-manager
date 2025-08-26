@@ -3,6 +3,8 @@ from datetime import date
 from django.db import models
 from django.utils import timezone
 
+from taskhub import settings
+
 
 class Position(models.Model):
     name = models.CharField(max_length=128, unique=True)
@@ -106,11 +108,7 @@ class Task(models.Model):
         on_delete=models.PROTECT,
         related_name="tasks"
     )
-    assignees = models.ManyToManyField(
-        Worker,
-        related_name="tasks",
-        blank=True
-    )
+    assignees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="tasks")
 
     tags = models.ManyToManyField(Tag, related_name="tasks", blank=True)
     project = models.ForeignKey(

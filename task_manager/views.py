@@ -10,6 +10,7 @@ from .models import Task, Worker
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
+    template_name = "task_manager/task_list.html"
     paginate_by = 20
 
     def get_queryset(self):
@@ -93,3 +94,9 @@ class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
         ctx["tasks_open"] = tasks_querys.open()
         ctx["tasks_done"] = tasks_querys.closed()
         return ctx
+
+
+class TaskDeleteView(generic.DeleteView):
+    model = Task
+    success_url = reverse_lazy("task_manager:task-list")
+    template_name = ("task_manager/confirm_delete.html")
