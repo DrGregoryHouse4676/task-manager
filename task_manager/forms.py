@@ -4,7 +4,9 @@ from .models import Task, Worker, Tag, Project
 
 
 class TaskForm(forms.ModelForm):
-    deadline = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}))
+    deadline = forms.DateField(
+        widget=forms.DateInput(attrs={"type": "date"})
+    )
     assignees = forms.ModelMultipleChoiceField(
         queryset=Worker.objects.all(),
         widget=forms.Select(attrs={"class": "form-control"})
