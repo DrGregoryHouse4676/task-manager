@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from .views import WorkerCreationForm, WorkerListView
 
 app_name = "task_manager"
 

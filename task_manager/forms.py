@@ -1,21 +1,6 @@
-import email
 from datetime import date
 from django import forms
 from .models import Task, Worker, Tag, Project
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
-
-
-Worker = get_user_model()
-
-
-class WorkerCreationForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
-        model = Worker
-        fields = ("username", "first_name", "last_name", "email", "password1", "password2")
-        widgets = {
-            email: forms.EmailInput(attrs={"placeholder": "name@example.com"})
-        }
 
 
 class TaskForm(forms.ModelForm):
