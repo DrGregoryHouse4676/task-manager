@@ -1,12 +1,28 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View, generic
+from django.views.generic import CreateView
+from django.contrib.auth import get_user_model
 
-from .forms import TaskForm
+from .forms import TaskForm, WorkerCreationForm
 from .models import Task, Worker
 
+
+Worker = get_user_model()
+
+
+class StaffRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
+
+
+class WorkerCreateView(StaffRequiredMixin, CreateView, StaffRequiredMixin):
+    model = Worker
+    form_class = WorkerCreationForm
+    template_name = "task_manager/worker_form.html"
+    success_url = reverse_lazy("task_manager:worker-list")
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
