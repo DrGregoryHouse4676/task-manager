@@ -38,7 +38,8 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
             querys = querys.filter(tags__name__iexact=tag)
 
         if q := self.request.GET.get("q"):
-            querys = querys.filter(Q(name__icontains=q) | Q(description__icontains=q))
+            querys = querys.filter(Q(name__icontains=q)
+                                   | Q(description__icontains=q))
 
         return querys.order_by(*Task._meta.ordering)
 

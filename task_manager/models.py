@@ -51,7 +51,11 @@ class Tag(models.Model):
 
 class Team(models.Model):
     name = models.CharField(max_length=128, unique=True)
-    members = models.ManyToManyField("Worker", related_name="teams", blank=True)
+    members = models.ManyToManyField(
+        "Worker",
+        related_name="teams",
+        blank=True
+    )
 
     class Meta:
         ordering = ["name"]
@@ -63,7 +67,11 @@ class Team(models.Model):
 class Project(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField(blank=True)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="projects")
+    team = models.ForeignKey(
+        Team,
+        on_delete=models.CASCADE,
+        related_name="projects"
+    )
     start_date = models.DateField(default=timezone.now)
     due_date = models.DateField(null=True, blank=True)
 
@@ -78,10 +86,13 @@ class Project(models.Model):
 class TaskQuerySet(models.query.QuerySet):
     def open(self):
         return self.filter(is_completed=False)
+
     def closed(self):
         return self.filter(is_completed=True)
+
     def due_today(self):
         return self.filter(is_completed=False, deadline=date.today())
+
     def overdue(self):
         return self.filter(is_completed=False, deadline_lt=date.today())
 
@@ -108,7 +119,8 @@ class Task(models.Model):
         on_delete=models.PROTECT,
         related_name="tasks"
     )
-    assignees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="tasks")
+    assignees = models.ManyToManyField(settings
+                                       .AUTH_USER_MODEL, related_name="tasks")
 
     tags = models.ManyToManyField(Tag, related_name="tasks", blank=True)
     project = models.ForeignKey(
@@ -134,5 +146,3 @@ class Task(models.Model):
     @property
     def is_overdue(self) -> bool:
         return not self.is_completed and self.deadline < date.today()
-
-

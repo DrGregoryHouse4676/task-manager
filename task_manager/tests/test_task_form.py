@@ -42,4 +42,5 @@ class TaskFormTests(TestCase):
         form = TaskForm(data={"deadline": past})
         form.full_clean()
         self.assertIn("deadline", form.errors)
-        self.assertIn("The deadline cannot be in the past.", form.errors["deadline"])
+        self.assertIn("The deadline cannot be in the past.",
+                      form.errors["deadline"])

@@ -39,11 +39,19 @@ class ProjectAdmin(admin.ModelAdmin):
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ("name", "task_type", "priority", "deadline", "is_completed", "project")
+    list_display = (
+        "name",
+        "task_type",
+        "priority",
+        "deadline",
+        "is_completed",
+        "project"
+    )
     list_filter = ("task_type", "priority", "is_completed", "project", "tags")
     search_fields = ("name", "description")
     filter_horizontal = ("tags", "assignees")
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related("task_type", "project").prefetch_related("tags", "assignees")
+        return (qs.select_related("task_type", "project")
+                .prefetch_related("tags", "assignees"))
