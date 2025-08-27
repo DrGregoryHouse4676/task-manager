@@ -1,0 +1,257 @@
+[
+{
+    "model": "task_manager.position",
+    "pk": 1,
+    "fields": {
+        "name": "Developer"
+    }
+},
+{
+    "model": "task_manager.position",
+    "pk": 2,
+    "fields": {
+        "name": "QA"
+    }
+},
+{
+    "model": "task_manager.worker",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$yhQbKJLYhcVpMSphFqX2hZ$CsXaQwyIazTX3dcRtZomVsBZq1HRkvXr2dfbTNcPI7g=",
+        "last_login": "2025-08-22T15:19:47.779Z",
+        "is_superuser": true,
+        "username": "Lev",
+        "first_name": "",
+        "last_name": "",
+        "email": "qwerty@qwerty.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-08-22T15:19:06.945Z",
+        "position": null,
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "task_manager.worker",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$gUaCtr6x5Wu9iumjLmV3Kp$UQYuh+vDW4bc3cF9u6VmA2WbjcS/DPwCkUJGuxCV8so=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "anna",
+        "first_name": "Anna",
+        "last_name": "Petrenko",
+        "email": "anna@example.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-08-26T05:59:30.360Z",
+        "position": null,
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "task_manager.worker",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$Xso1GIRsfqUO8VU3EzqSdj$l1wDTJBjmXHr7tDA2umD4FjW/9CW7pyWWqTvPKSMl+Y=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "oleg",
+        "first_name": "Oleg",
+        "last_name": "Shevchenko",
+        "email": "oleg@example.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-08-26T05:59:54.919Z",
+        "position": null,
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "task_manager.worker",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$X8aaJP8aaCuJueEEndt6Rv$9+qhBFatuPhjb/Zr2SmTRV5KW5LKNkUWIz6JTBcup8U=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "iryna",
+        "first_name": "Iryna",
+        "last_name": "Bondar",
+        "email": "iryna@example.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-08-26T06:00:07.472Z",
+        "position": null,
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "task_manager.tasktype",
+    "pk": 1,
+    "fields": {
+        "name": "Bug"
+    }
+},
+{
+    "model": "task_manager.tasktype",
+    "pk": 2,
+    "fields": {
+        "name": "New feature"
+    }
+},
+{
+    "model": "task_manager.tag",
+    "pk": 1,
+    "fields": {
+        "name": "python-refactoring"
+    }
+},
+{
+    "model": "task_manager.tag",
+    "pk": 2,
+    "fields": {
+        "name": "landing-page-layout"
+    }
+},
+{
+    "model": "task_manager.tag",
+    "pk": 3,
+    "fields": {
+        "name": "backend"
+    }
+},
+{
+    "model": "task_manager.tag",
+    "pk": 4,
+    "fields": {
+        "name": "frontend"
+    }
+},
+{
+    "model": "task_manager.tag",
+    "pk": 5,
+    "fields": {
+        "name": "urgent"
+    }
+},
+{
+    "model": "task_manager.tag",
+    "pk": 6,
+    "fields": {
+        "name": "feature"
+    }
+},
+{
+    "model": "task_manager.tag",
+    "pk": 7,
+    "fields": {
+        "name": "refactor"
+    }
+},
+{
+    "model": "task_manager.team",
+    "pk": 1,
+    "fields": {
+        "name": "Default team",
+        "members": []
+    }
+},
+{
+    "model": "task_manager.project",
+    "pk": 1,
+    "fields": {
+        "name": "Website Redesign",
+        "description": "Full redesign",
+        "team": 1,
+        "start_date": "2025-08-26",
+        "due_date": null
+    }
+},
+{
+    "model": "task_manager.project",
+    "pk": 2,
+    "fields": {
+        "name": "Mobile App MVP",
+        "description": "Build MVP",
+        "team": 1,
+        "start_date": "2025-08-26",
+        "due_date": null
+    }
+},
+{
+    "model": "task_manager.project",
+    "pk": 3,
+    "fields": {
+        "name": "Internal Tools Upgrade",
+        "description": "Upgrade tools",
+        "team": 1,
+        "start_date": "2025-08-26",
+        "due_date": null
+    }
+},
+{
+    "model": "task_manager.task",
+    "pk": 1,
+    "fields": {
+        "name": "Create a project",
+        "description": "Test description",
+        "deadline": "2025-08-26",
+        "is_completed": false,
+        "priority": "medium",
+        "task_type": 1,
+        "project": null,
+        "created_at": "2025-08-25T17:22:59.537Z",
+        "updated_at": "2025-08-25T17:22:59.537Z",
+        "assignees": [],
+        "tags": [
+            2
+        ]
+    }
+},
+{
+    "model": "task_manager.task",
+    "pk": 2,
+    "fields": {
+        "name": "Test",
+        "description": "Test123",
+        "deadline": "2025-08-27",
+        "is_completed": true,
+        "priority": "urgent",
+        "task_type": 2,
+        "project": null,
+        "created_at": "2025-08-26T06:35:16.567Z",
+        "updated_at": "2025-08-26T06:35:32.970Z",
+        "assignees": [
+            2
+        ],
+        "tags": [
+            4
+        ]
+    }
+},
+{
+    "model": "task_manager.task",
+    "pk": 3,
+    "fields": {
+        "name": "DSFSDF",
+        "description": "ASDFASDFA",
+        "deadline": "2025-08-30",
+        "is_completed": false,
+        "priority": "medium",
+        "task_type": 2,
+        "project": 2,
+        "created_at": "2025-08-26T11:21:48.903Z",
+        "updated_at": "2025-08-26T11:21:48.903Z",
+        "assignees": [
+            2
+        ],
+        "tags": [
+            3
+        ]
+    }
+}
+]
