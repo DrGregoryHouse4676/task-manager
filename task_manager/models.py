@@ -3,7 +3,7 @@ from datetime import date
 from django.db import models
 from django.utils import timezone
 
-from taskhub import settings
+from django.conf import settings
 
 
 class Position(models.Model):
