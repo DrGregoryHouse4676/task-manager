@@ -1,5 +1,14 @@
 from django.contrib import admin
-from .models import Position, Worker, TaskType, Task, Tag, Team, Project
+
+from .models import (
+    Position,
+    Worker,
+    TaskType,
+    Task,
+    Tag,
+    Team,
+    Project
+)
 
 
 @admin.register(Position)

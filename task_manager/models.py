@@ -1,9 +1,9 @@
-from django.contrib.auth.models import AbstractUser
 from datetime import date
-from django.db import models
-from django.utils import timezone
 
 from django.conf import settings
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.utils import timezone
 
 
 class Position(models.Model):

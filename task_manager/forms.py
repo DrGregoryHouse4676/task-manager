@@ -1,7 +1,8 @@
 from datetime import date
-from django import forms
-from .models import Task, Worker, Tag, Project
 
+from django import forms
+
+from .models import Project, Tag, Task, Worker
 
 class TaskForm(forms.ModelForm):
     deadline = forms.DateField(
