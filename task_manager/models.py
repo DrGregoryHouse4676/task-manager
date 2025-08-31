@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
+from datetime import date
 from django.db import models
 from django.utils import timezone
-from django.db.models.query import QuerySet
 
 from django.conf import settings
 
@@ -70,25 +70,20 @@ class Project(models.Model):
     team = models.ForeignKey(
         Team,
         on_delete=models.CASCADE,
-        related_name="projects",
+        related_name="projects"
     )
     start_date = models.DateField(default=timezone.now)
     due_date = models.DateField(null=True, blank=True)
 
     class Meta:
         ordering = ["name"]
-        constraints = [
-            models.UniqueConstraint(
-                fields=["team", "name"],
-                name="uniq_project_team_name",
-            ),
-        ]
+        unique_together = ("team", "name")
 
     def __str__(self):
         return f"{self.name}: {self.name}"
 
 
-class TaskQuerySet(QuerySet):
+class TaskQuerySetManager(models.query.QuerySet):
     def open(self):
         return self.filter(is_completed=False)
 
@@ -96,15 +91,10 @@ class TaskQuerySet(QuerySet):
         return self.filter(is_completed=True)
 
     def due_today(self):
-        today = timezone.localdate()
-        return self.filter(is_completed=False, deadline=today)
+        return self.filter(is_completed=False, deadline=date.today())
 
     def overdue(self):
-        today = timezone.localdate()
-        return self.filter(is_completed=False, deadline__lt=today)
-
-
-TaskQuerySetManager = TaskQuerySet.as_manager()
+        return self.filter(is_completed=False, deadline_lt=date.today())
 
 
 class Task(models.Model):
@@ -115,7 +105,7 @@ class Task(models.Model):
         LOW = "low", "Low"
 
     name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
+    description = models.TextField()
     deadline = models.DateField()
     is_completed = models.BooleanField(default=False, db_index=True)
     priority = models.CharField(
@@ -142,7 +132,7 @@ class Task(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    objects = TaskQuerySetManager
+    objects = TaskQuerySet.as_manager()
 
     class Meta:
         ordering = ["name", "is_completed", "deadline"]
@@ -155,5 +145,4 @@ class Task(models.Model):
 
     @property
     def is_overdue(self) -> bool:
-        today = timezone.localdate()
-        return (not self.is_completed) and (self.deadline < today)
+        return not self.is_completed and self.deadline < date.today()
