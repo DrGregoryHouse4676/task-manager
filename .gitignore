@@ -349,3 +349,6 @@ pyrightconfig.json
 .env.*
 *.env
 **/.env
+
+# Django collectstatic output
+staticfiles/
