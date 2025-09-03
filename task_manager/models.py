@@ -83,7 +83,7 @@ class Project(models.Model):
         return f"{self.name}: {self.name}"
 
 
-class TaskQuerySetManager(models.query.QuerySet):
+class TaskQuerySet(models.QuerySet):
     def open(self):
         return self.filter(is_completed=False)
 
@@ -94,7 +94,7 @@ class TaskQuerySetManager(models.query.QuerySet):
         return self.filter(is_completed=False, deadline=date.today())
 
     def overdue(self):
-        return self.filter(is_completed=False, deadline_lt=date.today())
+        return self.filter(is_completed=False, deadline__lt=date.today())
 
 
 class Task(models.Model):
