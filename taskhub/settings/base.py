@@ -1,6 +1,7 @@
 
 from pathlib import Path
 import os
+
 from dotenv import load_dotenv
 
 
@@ -89,10 +90,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "task_manager.Worker"
 
+LOGIN_URL = "/accounts/login/"
+
 LOGIN_REDIRECT_URL = "/"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-LOGOUT_REDIRECT_URL = "login"
+LOGOUT_REDIRECT_URL = "/"
 
 STATICFILES_DIRS = [BASE_DIR / "static"]
