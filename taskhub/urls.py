@@ -16,9 +16,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.http import HttpResponse
+from django.shortcuts import redirect
+
+
+def health(_request):
+    return HttpResponse("OK")
+
+def root_redirect(_request):
+    return redirect("task_manager:task-list")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
-    path("", include("task_manager.urls")),
+    path("", root_redirect, name="root"),
+    path("", include(("task_manager.urls", "task_manager"), namespace="task_manager")),
+    path("health/", health),
 ]

@@ -11,6 +11,7 @@ from .models import Task, Worker
 class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
     template_name = "task_manager/task_list.html"
+    context_object_name = "task_list"
     paginate_by = 20
 
     def get_queryset(self):
