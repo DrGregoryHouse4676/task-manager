@@ -23,13 +23,10 @@ from django.shortcuts import redirect
 def health(_request):
     return HttpResponse("OK")
 
-def root_redirect(_request):
-    return redirect("task_manager:task-list")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
-    path("", root_redirect, name="root"),
     path("", include(("task_manager.urls", "task_manager"), namespace="task_manager")),
     path("health/", health),
 ]
