@@ -1,68 +1,42 @@
 from datetime import date
-
 from django import forms
-
-from .models import Project, Tag, Task, Worker
+from .models import Task, Tag, Worker
 
 class TaskForm(forms.ModelForm):
-    deadline = forms.DateField(
-        widget=forms.DateInput(attrs={"type": "date"})
-    )
+    class Meta:
+        model = Task
+        fields = (
+            "name", "description", "deadline", "priority",
+            "task_type", "assignees", "tags", "project", "is_completed",
+        )
+        widgets = {
+            "name": forms.TextInput(attrs={"class": "form-control"}),
+            "description": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
+            "deadline": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "priority": forms.Select(attrs={"class": "form-select"}),
+            "task_type": forms.Select(attrs={"class": "form-select"}),
+            "project": forms.Select(attrs={"class": "form-select"}),
+        }
+
     assignees = forms.ModelMultipleChoiceField(
         queryset=Worker.objects.all(),
-        widget=forms.Select(attrs={"class": "form-control", "size": 6}),
+        required=False,
+        widget=forms.SelectMultiple(attrs={"class": "form-select", "size": 8}),
     )
     tags = forms.ModelMultipleChoiceField(
         queryset=Tag.objects.all(),
         required=False,
-        widget=forms.Select(attrs={"class": "form-check" , "size": 6}),
-    )
-    project = forms.ModelChoiceField(
-        queryset=Project.objects.all(),
-        widget=forms.Select(attrs={"class": "form-control"}),
-        required=False
+        widget=forms.SelectMultiple(attrs={"class": "form-select", "size": 8}),
     )
 
-    class Meta:
-        model = Task
-        fields = (
-            "name",
-            "description",
-            "deadline",
-            "priority",
-            "task_type",
-            "assignees",
-            "tags",
-            "project",
-            "is_completed",
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["assignees"].widget = forms.SelectMultiple(
+            attrs={"class": "form-select", "size": 8}
         )
-        widgets = {
-            "name": forms.TextInput(
-                attrs={"class": "form-control"}
-            ),
-            "description": forms.Textarea(
-                attrs={"class": "form-control", "rows": 4}
-            ),
-            "deadline": forms.DateInput(
-                attrs={"type": "date", "class": "form-control"}
-            ),
-            "priority": forms.Select(
-                attrs={"class": "form-select"}
-            ),
-            "task_type": forms.Select(
-                attrs={"class": "form-select"}
-            ),
-            "project": forms.Select(
-                attrs={"class": "form-select"}
-            ),
-
-            "assignees": forms.SelectMultiple(
-                attrs={"class": "form-select", "size": 6}
-            ),
-            "tags": forms.SelectMultiple(
-                attrs={"class": "form-select", "size": 6}
-            ),
-        }
+        self.fields["tags"].widget = forms.SelectMultiple(
+            attrs={"class": "form-select", "size": 8}
+        )
 
     def clean_deadline(self):
         ded = self.cleaned_data["deadline"]
