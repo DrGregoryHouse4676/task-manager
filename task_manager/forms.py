@@ -1,8 +1,27 @@
 from datetime import date
 from django import forms
-from .models import Task, Tag, Worker
+from django.contrib.auth import get_user_model
+from .models import Task, Tag, Project
+
+User = get_user_model()
 
 class TaskForm(forms.ModelForm):
+    assignees = forms.ModelMultipleChoiceField(
+        queryset=User.objects.none(),
+        required=False,
+        widget=forms.SelectMultiple(attrs={"class": "form-select", "size": 8}),
+    )
+    tags = forms.ModelMultipleChoiceField(
+        queryset=Tag.objects.none(),
+        required=False,
+        widget=forms.SelectMultiple(attrs={"class": "form-select", "size": 8}),
+    )
+    project = forms.ModelChoiceField(
+        queryset=Project.objects.none(),
+        required=False,
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+
     class Meta:
         model = Task
         fields = (
@@ -15,26 +34,13 @@ class TaskForm(forms.ModelForm):
             "deadline": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
             "priority": forms.Select(attrs={"class": "form-select"}),
             "task_type": forms.Select(attrs={"class": "form-select"}),
-            "project": forms.Select(attrs={"class": "form-select"}),
         }
-
-    assignees = forms.ModelMultipleChoiceField(
-        queryset=Worker.objects.all(),
-        widget=forms.SelectMultiple(attrs={"class": "form-select", "size": 1}),
-    )
-    tags = forms.ModelMultipleChoiceField(
-        queryset=Tag.objects.all(),
-        widget=forms.SelectMultiple(attrs={"class": "form-select", "size": 1}),
-    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["assignees"].widget = forms.SelectMultiple(
-            attrs={"class": "form-select", "size": 8}
-        )
-        self.fields["tags"].widget = forms.SelectMultiple(
-            attrs={"class": "form-select", "size": 8}
-        )
+        self.fields["assignees"].queryset = User.objects.order_by("username")
+        self.fields["tags"].queryset = Tag.objects.order_by("name")
+        self.fields["project"].queryset = Project.objects.order_by("name")
 
     def clean_deadline(self):
         ded = self.cleaned_data["deadline"]
