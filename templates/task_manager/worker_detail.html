@@ -3,6 +3,7 @@
 {% block content %}
   <div class="detail-card">
     <h1>👤 {{ worker.username }}</h1>
+    <a href="{% url 'task_manager:worker-create' %}" class="btn btn-primary"> ➕ Add worker</a>
     <p><strong>First name:</strong> {{ worker.first_name }}</p>
     <p><strong>Last name:</strong> {{ worker.last_name }}</p>
     <p><strong>Email:</strong> {{ worker.email }}</p>
