@@ -38,8 +38,8 @@ class TaskForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["assignees"].widget = forms.CheckboxSelectMultiple("user_name")
-        self.fields["tags"].widget = forms.CheckboxSelectMultiple("name")
+        self.fields["assignees"].widget = forms.CheckboxSelectMultiple("assignees")
+        self.fields["tags"].widget = forms.CheckboxSelectMultiple("tags")
         self.fields["project"].queryset = Project.objects.order_by("name")
 
     def clean_deadline(self):
