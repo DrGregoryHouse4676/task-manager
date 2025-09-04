@@ -20,13 +20,11 @@ class TaskForm(forms.ModelForm):
 
     assignees = forms.ModelMultipleChoiceField(
         queryset=Worker.objects.all(),
-        required=False,
-        widget=forms.SelectMultiple(attrs={"class": "form-select", "size": 8}),
+        widget=forms.SelectMultiple(attrs={"class": "form-select", "size": 1}),
     )
     tags = forms.ModelMultipleChoiceField(
         queryset=Tag.objects.all(),
-        required=False,
-        widget=forms.SelectMultiple(attrs={"class": "form-select", "size": 8}),
+        widget=forms.SelectMultiple(attrs={"class": "form-select", "size": 1}),
     )
 
     def __init__(self, *args, **kwargs):
