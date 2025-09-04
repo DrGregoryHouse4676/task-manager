@@ -36,15 +36,8 @@ class TaskForm(forms.ModelForm):
         self.fields["tags"].required = False
         self.fields["project"].required = False
 
-        self.fields["assignees"].widget = forms.SelectMultiple(
-            attrs={"class": "form-select", "size": 8}
-        )
-        self.fields["tags"].widget = forms.SelectMultiple(
-            attrs={"class": "form-select", "size": 8}
-        )
-
-        # self.fields["assignees"].widget = forms.CheckboxSelectMultiple()
-        # self.fields["tags"].widget = forms.CheckboxSelectMultiple()
+        self.fields["assignees"].widget = forms.CheckboxSelectMultiple()
+        self.fields["tags"].widget = forms.CheckboxSelectMultiple()
 
     def clean_deadline(self):
         ded = self.cleaned_data["deadline"]
