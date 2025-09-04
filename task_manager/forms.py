@@ -1,7 +1,7 @@
 from datetime import date
 from django import forms
 from django.contrib.auth import get_user_model
-from .models import Task, Tag, Project
+from .models import Task, Tag, Project, Worker
 
 User = get_user_model()
 
@@ -38,9 +38,17 @@ class TaskForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["assignees"].widget = forms.CheckboxSelectMultiple("assignees")
-        self.fields["tags"].widget = forms.CheckboxSelectMultiple("tags")
+
+        self.fields["assignees"].queryset = Worker.objects.order_by("username")
+        self.fields["tags"].queryset = Tag.objects.order_by("name")
         self.fields["project"].queryset = Project.objects.order_by("name")
+
+        self.fields["assignees"].widget = forms.CheckboxSelectMultiple()
+        self.fields["tags"].widget = forms.CheckboxSelectMultiple()
+
+        self.fields["assignees"].required = False
+        self.fields["tags"].required = False
+        self.fields["project"].required = False
 
     def clean_deadline(self):
         ded = self.cleaned_data["deadline"]
