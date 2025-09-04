@@ -1,7 +1,9 @@
 from datetime import date
 from django import forms
 from django.contrib.auth import get_user_model
-from .models import Task, Tag, Project
+from .models import Task, Tag, Project, Worker
+from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import ValidationError
 
 User = get_user_model()
 
@@ -14,7 +16,7 @@ class TaskForm(forms.ModelForm):
         )
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
-            "description": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
+            "description": forms.Textarea(attrs={"class": "form-control"}),
             "deadline": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
             "priority": forms.Select(attrs={"class": "form-select"}),
             "task_type": forms.Select(attrs={"class": "form-select"}),
@@ -43,3 +45,51 @@ class TaskForm(forms.ModelForm):
         if ded < date.today():
             raise forms.ValidationError("The deadline cannot be in the past.")
         return ded
+
+
+class WorkerCreateForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = Worker
+        fields = ("username", "first_name", "last_name", "email", "position")
+        widgets = {
+            "username": forms.TextInput(attrs={"class": "form-control", "autocomplete": "username"}),
+            "first_name": forms.TextInput(attrs={"class": "form-control"}),
+            "last_name": forms.TextInput(attrs={"class": "form-control"}),
+            "email": forms.EmailInput(attrs={"class": "form-control", "autocomplete": "email"}),
+            "position": forms.Select(attrs={"class": "form-select"}),
+        }
+        help_texts = {
+            "username": "",
+        }
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if email and Worker.objects.filter(email__iexact=email).exists():
+            raise ValidationError("A user with this email already exists.")
+        return email
+
+
+class WorkerUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Worker
+        fields = ("username", "first_name", "last_name", "email", "position", "is_active")
+        widgets = {
+            "username": forms.TextInput(attrs={"class": "form-control"}),
+            "first_name": forms.TextInput(attrs={"class": "form-control"}),
+            "last_name": forms.TextInput(attrs={"class": "form-control"}),
+            "email": forms.EmailInput(attrs={"class": "form-control"}),
+            "position": forms.Select(attrs={"class": "form-select"}),
+            "is_active": forms.CheckboxInput(attrs={"class": "form-check-input"}),
+        }
+        help_texts = {"username": ""}
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if not email:
+            return email
+        qs = Worker.objects.filter(email__iexact=email)
+        if self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise ValidationError("A user with this email already exists.")
+        return email

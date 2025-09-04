@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View, generic
 
-from .forms import TaskForm
+from .forms import TaskForm, WorkerCreateForm, WorkerUpdateForm
 from .models import Task, Worker
 
 
@@ -102,3 +102,23 @@ class TaskDeleteView(generic.DeleteView):
     model = Task
     success_url = reverse_lazy("task_manager:task-list")
     template_name = ("task_manager/confirm_delete.html")
+
+
+class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Worker
+    form_class = WorkerCreateForm
+    template_name = "task_manager/worker_form.html"
+    success_url = reverse_lazy("task_manager:worker-list")
+
+
+class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Worker
+    form_class = WorkerUpdateForm
+    template_name = "task_manager/worker_form.html"
+    success_url = reverse_lazy("task_manager:worker-list")
+
+
+class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Worker
+    template_name = "task_manager/worker_confirm_delete.html"
+    success_url = reverse_lazy("task_manager:worker-list")
