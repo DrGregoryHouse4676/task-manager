@@ -2,7 +2,6 @@
 from pathlib import Path
 import os
 
-from django.urls import reverse_lazy
 from dotenv import load_dotenv
 
 
@@ -97,6 +96,6 @@ LOGIN_REDIRECT_URL = "/"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-LOGOUT_REDIRECT_URL = reverse_lazy("login")
+LOGOUT_REDIRECT_URL = "/"
 
 STATICFILES_DIRS = [BASE_DIR / "static"]
