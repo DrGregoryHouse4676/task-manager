@@ -38,9 +38,6 @@ class TaskForm(forms.ModelForm):
         self.fields["tags"].required = False
         self.fields["project"].required = False
 
-        self.fields["assignees"].widget = forms.CheckboxSelectMultiple()
-        self.fields["tags"].widget = forms.CheckboxSelectMultiple()
-
     def clean_deadline(self):
         ded = self.cleaned_data["deadline"]
         if ded < date.today():
