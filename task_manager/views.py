@@ -70,7 +70,7 @@ class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 
 class TaskToggleCompleteView(LoginRequiredMixin, View):
-    def post(self, pk):
+    def post(self, request, pk):
         task = get_object_or_404(Task, pk=pk)
         task.is_completed = not task.is_completed
         task.save(update_fields=["is_completed"])

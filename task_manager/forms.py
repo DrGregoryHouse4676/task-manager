@@ -10,11 +10,12 @@ class TaskForm(forms.ModelForm):
     )
     assignees = forms.ModelMultipleChoiceField(
         queryset=Worker.objects.all(),
-        widget=forms.Select(attrs={"class": "form-control"})
+        widget=forms.Select(attrs={"class": "form-control", "size": 6}),
     )
     tags = forms.ModelMultipleChoiceField(
         queryset=Tag.objects.all(),
-        widget=forms.Select(attrs={"class": "form-check"})
+        required=False,
+        widget=forms.Select(attrs={"class": "form-check" , "size": 6}),
     )
     project = forms.ModelChoiceField(
         queryset=Project.objects.all(),

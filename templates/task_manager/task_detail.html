@@ -5,7 +5,8 @@
     <h1>📝 {{ task.name }}</h1>
     <p><strong>Description:</strong> {{ task.description }}</p>
     <p><strong>Deadline:</strong> {{ task.deadline }}</p>
-    <p><strong>Priority:</strong> {{ task.priority }}</p>
+    <p><strong>Created:</strong> {{ task.created_at|date:"d.m.Y H:i" }}</p>
+    <p><strong>Priority:</strong> {{ task.get_priority_display }}</p>
     <p><strong>Completed:</strong> {% if task.is_completed %}✅ Yes{% else %}❌ No{% endif %}</p>
     <p><strong>Task type:</strong> {{ task.task_type.name }}</p>
     <p><strong>Assignees:</strong>

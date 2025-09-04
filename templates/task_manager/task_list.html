@@ -14,7 +14,8 @@
         <div class="card-body">
           <h5 class="card-title">{{ task.name }}</h5>
           <p class="card-text">{{ task.description|truncatechars:100 }}</p>
-          <p><strong>Deadline:</strong> {{ task.deadline }}</p>
+          <p class="mb-1"><strong>Deadline:</strong> {{ task.deadline }}</p>
+          <p class="text-muted mb-3"><strong>Created:</strong> {{ task.created_at|date:"d.m.Y H:i" }}</p>
           <a href="{% url 'task_manager:task-detail' task.id %}" class="btn btn-outline-primary btn-sm">🔍 View</a>
         </div>
       </div>
