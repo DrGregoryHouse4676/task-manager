@@ -37,17 +37,30 @@ class TaskForm(forms.ModelForm):
             "is_completed",
         )
         widgets = {
-            "assignees": forms.SelectMultiple(
+            "name": forms.TextInput(
                 attrs={"class": "form-control"}
             ),
-            "tags": forms.CheckboxSelectMultiple(
-                attrs={"class": "form-check"}
-            ),
-            "project": forms.Select(
-                attrs={"class": "form-control"}
+            "description": forms.Textarea(
+                attrs={"class": "form-control", "rows": 4}
             ),
             "deadline": forms.DateInput(
-                attrs={"type": "date"}
+                attrs={"type": "date", "class": "form-control"}
+            ),
+            "priority": forms.Select(
+                attrs={"class": "form-select"}
+            ),
+            "task_type": forms.Select(
+                attrs={"class": "form-select"}
+            ),
+            "project": forms.Select(
+                attrs={"class": "form-select"}
+            ),
+
+            "assignees": forms.SelectMultiple(
+                attrs={"class": "form-select", "size": 6}
+            ),
+            "tags": forms.SelectMultiple(
+                attrs={"class": "form-select", "size": 6}
             ),
         }
 
