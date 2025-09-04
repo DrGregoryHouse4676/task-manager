@@ -19,8 +19,16 @@
           <a class="nav-link" href="{% url 'task_manager:worker-list' %}">👷 Workers</a>
         </li>
       </ul>
-      <span class="navbar-text me-3">Hi, {{ user.username }}</span>
-      <a href="{% url 'logout' %}" class="btn btn-outline-light">🚪 Log out</a>
+      {% if user.is_authenticated %}
+        <span class="navbar-text me-3">Hi, {{ user.get_username }}</span>
+        {% if request.resolver_match.url_name != 'login' %}
+          <a href="{% url 'logout' %}?next={% url 'login' %}" class="btn btn-outline-light">🚪 Log out</a>
+        {% endif %}
+      {% else %}
+        {% if request.resolver_match.url_name != 'login' %}
+          <a href="{% url 'login' %}" class="btn btn-outline-light">🔐 Log in</a>
+        {% endif %}
+      {% endif %}
     </div>
   </div>
 </nav>
