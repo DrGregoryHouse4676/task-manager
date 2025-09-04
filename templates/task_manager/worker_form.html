@@ -59,7 +59,9 @@
             <div class="col-md-6 mb-3">
               <label class="form-label">Password confirmation</label>
               {{ form.password2 }}
+              <div class="form-text">Please confirm password.</div>
               {{ form.password2.errors }}
+
             </div>
           </div>
         {% endif %}
@@ -70,8 +72,8 @@
           </div>
         {% endif %}
         <div class="d-flex gap-2 mt-4">
-          <button class="btn btn-primary" type="submit">💾 Save/button>
-          <a class="btn btn-outline-secondary" href="{% url 'task_manager:worker-list' %}">Cancel</a>
+          <button class="btn btn-primary" type="submit">💾 Save </button>
+          <button class="btn btn-outline-secondary" href="{% url 'task_manager:worker-list' %}">Cancel</button>
         </div>
       </form>
     </div>
