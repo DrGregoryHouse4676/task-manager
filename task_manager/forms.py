@@ -19,6 +19,8 @@ class TaskForm(forms.ModelForm):
             "priority": forms.Select(attrs={"class": "form-select"}),
             "task_type": forms.Select(attrs={"class": "form-select"}),
             "project": forms.Select(attrs={"class": "form-select"}),
+            "assignees": forms.CheckboxSelectMultiple(),
+            "tags": forms.CheckboxSelectMultiple(),
         }
         help_texts = {
             "assignees": "",
