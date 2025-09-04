@@ -2,9 +2,10 @@
 {% block title %}Workers{% endblock %}
 
 {% block content %}
-<div class="d-flex align-items-center mb-3">
+<div class="d-flex align-items-center justify-content-between mb-3">
   <h1 class="mb-0">👷 Workers</h1>
-  <a href="{% url 'task_manager:worker-create' %}" class="btn btn-primary ms-auto"> ➕ Add worker </a>
+  <a href="{% url 'task_manager:worker-create' %}" class="btn btn-primary"> ➕ Add worker </a>
+</div>
 <table class="table table-striped table-hover shadow-sm">
   <thead class="table-dark">
     <tr>
