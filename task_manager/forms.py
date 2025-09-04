@@ -68,6 +68,25 @@ class WorkerCreateForm(UserCreationForm):
             raise ValidationError("A user with this email already exists.")
         return email
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["password1"].widget = forms.PasswordInput(
+            attrs={
+                "class": "form-control",
+                "autocomplete": "new-password",
+                "placeholder": "New password",
+            }
+        )
+        self.fields["password2"].widget = forms.PasswordInput(
+            attrs={
+                "class": "form-control",
+                "autocomplete": "new-password",
+                "placeholder": "Confirm password",
+            }
+        )
+        self.fields["password1"].help_text = "Please enter your new password"
+        self.fields["password2"].help_text = "Please confirm your new password"
+
 
 class WorkerUpdateForm(forms.ModelForm):
     class Meta:
