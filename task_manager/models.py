@@ -130,12 +130,12 @@ class Task(models.Model):
         null=True,
         blank=True
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True,db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = TaskQuerySet.as_manager()
 
     class Meta:
-        ordering = ["name", "is_completed", "deadline"]
+        ordering = ["name", "is_completed", "deadline", "-created_at"]
         indexes = [
             models.Index(fields=["deadline", "is_completed"]),
         ]
