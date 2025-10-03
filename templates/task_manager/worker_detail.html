@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="detail-card">
+    <h1>👤 {{ worker.username }}</h1>
+    <p><strong>First name:</strong> {{ worker.first_name }}</p>
+    <p><strong>Last name:</strong> {{ worker.last_name }}</p>
+    <p><strong>Email:</strong> {{ worker.email }}</p>
+    <p><strong>Position:</strong> {{ worker.position.name }}</p>
+  </div>
+{% endblock %}

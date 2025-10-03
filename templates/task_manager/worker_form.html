@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}{% if object %}Edit worker{% else %}Create worker{% endif %}{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 720px;">
+  <div class="card shadow-sm">
+    <div class="card-body p-4">
+      <h1 class="h3 mb-3">
+        {% if object %}✏️ Editing an employee{% else %}➕ New emloyee{% endif %}
+      </h1>
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Username</label>
+            {{ form.username }}
+            <div class="form-text">Login to log in. Latin letters and numbers.</div>
+            {{ form.username.errors }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Position</label>
+            {{ form.position }}
+            {{ form.position.errors }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Name</label>
+            {{ form.first_name }}
+            {{ form.first_name.errors }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Last name</label>
+            {{ form.last_name }}
+            {{ form.last_name.errors }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          {{ form.email }}
+          {{ form.email.errors }}
+        </div>
+        {% if form.password1 %}
+          <hr class="my-4">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Password</label>
+              {{ form.password1 }}
+              <div class="form-text">Min 8 characters.</div>
+              {{ form.password1.errors }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Password confirmation</label>
+              {{ form.password2 }}
+              <div class="form-text">Please confirm password.</div>
+              {{ form.password2.errors }}
+            </div>
+          </div>
+        {% endif %}
+        {% if form.is_active %}
+          <div class="form-check mb-3">
+            {{ form.is_active }} <label class="form-check-label">Active</label>
+            {{ form.is_active.errors }}
+          </div>
+        {% endif %}
+        <div class="d-flex gap-2 mt-4">
+          <button class="btn btn-primary" type="submit">💾 Save </button>
+          <button class="btn btn-outline-secondary" href="{% url 'task_manager:worker-list' %}">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
